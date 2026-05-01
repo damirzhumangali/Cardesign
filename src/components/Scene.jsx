@@ -48,23 +48,14 @@ function LoadedStudio() {
     const normalizedScale = 18 / maxDimension;
 
     scene.traverse((child) => {
-      if (!child.isMesh) {
-        return;
-      }
-
+      if (!child.isMesh) return;
       child.castShadow = true;
       child.receiveShadow = true;
-
       if (child.material) {
         child.material = child.material.clone();
-
-        if ('envMapIntensity' in child.material) {
-          child.material.envMapIntensity = 1.1;
-        }
-
-        if ('metalness' in child.material) {
+        if ('envMapIntensity' in child.material) child.material.envMapIntensity = 1.1;
+        if ('metalness' in child.material)
           child.material.metalness = Math.min(child.material.metalness + 0.05, 1);
-        }
       }
     });
 
@@ -104,17 +95,14 @@ function FallbackStudio() {
         <circleGeometry args={[18, 64]} />
         <meshStandardMaterial color="#06080d" roughness={0.96} metalness={0.08} />
       </mesh>
-
       <mesh position={[0, 3.3, -7.5]} rotation={[0.14, 0, 0]}>
         <torusGeometry args={[6.2, 0.08, 32, 140]} />
         <meshBasicMaterial color="#58d6ff" transparent opacity={0.26} />
       </mesh>
-
       <mesh position={[0, 2.1, -10]}>
         <planeGeometry args={[28, 12]} />
         <meshStandardMaterial color="#08111d" roughness={0.94} metalness={0.15} />
       </mesh>
-
       <RoundedBox
         args={[12.5, 6.2, 0.28]}
         radius={0.36}
@@ -122,7 +110,6 @@ function FallbackStudio() {
         position={[0, 2.1, -10.2]}
         material={frameMaterial}
       />
-
       {[-5.2, 5.2].map((x) => (
         <group key={x} position={[x, 2.2, -3]}>
           <mesh rotation={[0, 0, Math.PI / 2]}>
@@ -141,11 +128,7 @@ function FallbackStudio() {
 
 function StudioEnvironment() {
   const studioAvailable = useAssetPresence('/models/studio.glb');
-
-  if (!studioAvailable) {
-    return <FallbackStudio />;
-  }
-
+  if (!studioAvailable) return <FallbackStudio />;
   return (
     <Suspense fallback={<FallbackStudio />}>
       <LoadedStudio />
@@ -174,17 +157,18 @@ function SceneStage({ scrollState }) {
     const studioPresence = clamp01(studio * 1.08 - gallery * 0.92);
     const galleryPresence = clamp01(gallery * 1.04 - studio * 0.78);
 
-    let carX = compact ? 0.18 : 0.85;
-    let carY = compact ? -0.25 : -0.32;
+    // Car positioned lower so camera (above) sees the full car centered
+    let carX = compact ? 0.1 : 0.5;
+    let carY = compact ? -0.5 : -0.55;
     let carZ = 0;
-    let carScale = compact ? 0.78 : 1;
+    let carScale = compact ? 1.05 : 1.4;
     let carRotX = pointer.y * 0.08 + 0.03;
     let carRotY = pointer.x * 0.24 - 0.34;
     let carRotZ = pointer.x * -0.04;
 
     let cameraX = pointer.x * (compact ? 0.28 : 0.42);
-    let cameraY = 0.8 + pointer.y * 0.16;
-    let cameraZ = compact ? 8.7 : 7.4;
+    let cameraY = compact ? 1.6 : 1.8;
+    let cameraZ = compact ? 8.5 : 7.2;
     let keyLight = 20;
     let rimLight = 10;
     let fillLight = 7;
@@ -192,8 +176,8 @@ function SceneStage({ scrollState }) {
 
     if (cinematic > 0) {
       carX = mix(carX, compact ? 0.05 : -0.25, cinematic);
-      carY = mix(carY, -0.12, cinematic);
-      carScale = mix(carScale, compact ? 0.96 : 1.24, cinematic);
+      carY = mix(carY, compact ? -0.5 : -0.55, cinematic);
+      carScale = mix(carScale, compact ? 1.2 : 1.6, cinematic);
       carRotX = mix(carRotX, 0.08, cinematic);
       carRotY = mix(carRotY, compact ? 0.6 : 0.92, cinematic);
       cameraX = mix(cameraX, pointer.x * 0.25 - 0.35, cinematic);
@@ -205,7 +189,7 @@ function SceneStage({ scrollState }) {
 
     if (design > 0) {
       carX = mix(carX, compact ? 0.24 : 1.45, design);
-      carY = mix(carY, -0.2, design);
+      carY = mix(carY, compact ? -0.5 : -0.55, design);
       carRotY = mix(carRotY, 0.56, design);
       cameraX = mix(cameraX, compact ? 0.08 : 0.25, design);
       cameraZ = mix(cameraZ, compact ? 8.1 : 7, design);
@@ -213,12 +197,12 @@ function SceneStage({ scrollState }) {
 
     if (performance > 0) {
       carX = mix(carX, compact ? -0.05 : 0.22, performance);
-      carY = mix(carY, -0.36, performance);
-      carScale = mix(carScale, compact ? 0.92 : 1.36, performance);
+      carY = mix(carY, compact ? -0.5 : -0.55, performance);
+      carScale = mix(carScale, compact ? 0.95 : 1.4, performance);
       carRotY = mix(carRotY, 1.18, performance);
       carRotZ = mix(carRotZ, -0.05, performance);
       cameraX = mix(cameraX, pointer.x * 0.18 - 0.18, performance);
-      cameraY = mix(cameraY, 0.66, performance);
+      cameraY = mix(cameraY, compact ? 1.4 : 1.6, performance);
       cameraZ = mix(cameraZ, compact ? 7.4 : 5.85, performance);
       keyLight = mix(keyLight, 28, performance);
       rimLight = mix(rimLight, 16, performance);
@@ -228,14 +212,14 @@ function SceneStage({ scrollState }) {
 
     if (studioPresence > 0) {
       carX = mix(carX, compact ? 0.02 : 0.04, studioPresence);
-      carY = mix(carY, compact ? -0.16 : -0.18, studioPresence);
+      carY = mix(carY, compact ? -0.48 : -0.52, studioPresence);
       carZ = mix(carZ, compact ? 0.08 : 0.14, studioPresence);
-      carScale = mix(carScale, compact ? 1 : 1.18, studioPresence);
+      carScale = mix(carScale, compact ? 1.0 : 1.25, studioPresence);
       carRotX = mix(carRotX, 0.05, studioPresence);
       carRotY = mix(carRotY, compact ? 0.28 : 0.34, studioPresence);
       carRotZ = mix(carRotZ, 0, studioPresence);
       cameraX = mix(cameraX, pointer.x * 0.1 + (compact ? 0 : 0.04), studioPresence);
-      cameraY = mix(cameraY, compact ? 0.84 : 0.9, studioPresence);
+      cameraY = mix(cameraY, compact ? 1.6 : 1.8, studioPresence);
       cameraZ = mix(cameraZ, compact ? 7.5 : 7.25, studioPresence);
       keyLight = mix(keyLight, 19, studioPresence);
       rimLight = mix(rimLight, 12, studioPresence);
@@ -245,23 +229,23 @@ function SceneStage({ scrollState }) {
 
     if (galleryPresence > 0) {
       carX = mix(carX, compact ? 0.12 : -0.46, galleryPresence);
-      carY = mix(carY, -0.14, galleryPresence);
+      carY = mix(carY, compact ? -0.5 : -0.55, galleryPresence);
       carZ = mix(carZ, compact ? -0.04 : -0.12, galleryPresence);
-      carScale = mix(carScale, compact ? 0.88 : 0.98, galleryPresence);
+      carScale = mix(carScale, compact ? 0.9 : 1.1, galleryPresence);
       carRotY = mix(carRotY, compact ? -0.08 : -0.18, galleryPresence);
       cameraX = mix(cameraX, pointer.x * 0.16 + 0.08, galleryPresence);
-      cameraY = mix(cameraY, 0.88, galleryPresence);
+      cameraY = mix(cameraY, compact ? 1.6 : 1.8, galleryPresence);
       cameraZ = mix(cameraZ, compact ? 8 : 8.45, galleryPresence);
     }
 
     if (final > 0) {
       carX = mix(carX, compact ? 0.1 : 0.24, final);
-      carY = mix(carY, -0.12, final);
+      carY = mix(carY, compact ? -0.5 : -0.55, final);
       carZ = mix(carZ, -0.4, final);
-      carScale = mix(carScale, compact ? 0.72 : 0.86, final);
+      carScale = mix(carScale, compact ? 0.8 : 1.0, final);
       carRotY = mix(carRotY, 0.24, final);
       cameraX = mix(cameraX, 0, final);
-      cameraY = mix(cameraY, 0.92, final);
+      cameraY = mix(cameraY, compact ? 1.6 : 1.8, final);
       cameraZ = mix(cameraZ, compact ? 9.4 : 10.6, final);
       keyLight = mix(keyLight, 16, final);
       rimLight = mix(rimLight, 8, final);
@@ -275,24 +259,9 @@ function SceneStage({ scrollState }) {
       carRigRef.current.position.x = damp(carRigRef.current.position.x, carX, 3.2, delta);
       carRigRef.current.position.y = damp(carRigRef.current.position.y, carY, 3.2, delta);
       carRigRef.current.position.z = damp(carRigRef.current.position.z, carZ, 3.2, delta);
-      carRigRef.current.rotation.x = damp(
-        carRigRef.current.rotation.x,
-        carRotX + sceneTiltX,
-        3.4,
-        delta,
-      );
-      carRigRef.current.rotation.y = damp(
-        carRigRef.current.rotation.y,
-        carRotY + sceneTiltY,
-        3.4,
-        delta,
-      );
-      carRigRef.current.rotation.z = damp(
-        carRigRef.current.rotation.z,
-        carRotZ,
-        3.4,
-        delta,
-      );
+      carRigRef.current.rotation.x = damp(carRigRef.current.rotation.x, carRotX + sceneTiltX, 3.4, delta);
+      carRigRef.current.rotation.y = damp(carRigRef.current.rotation.y, carRotY + sceneTiltY, 3.4, delta);
+      carRigRef.current.rotation.z = damp(carRigRef.current.rotation.z, carRotZ, 3.4, delta);
       carRigRef.current.scale.x = damp(carRigRef.current.scale.x, carScale, 3.2, delta);
       carRigRef.current.scale.y = damp(carRigRef.current.scale.y, carScale, 3.2, delta);
       carRigRef.current.scale.z = damp(carRigRef.current.scale.z, carScale, 3.2, delta);
@@ -302,21 +271,10 @@ function SceneStage({ scrollState }) {
       studioRigRef.current.rotation.y = damp(
         studioRigRef.current.rotation.y,
         pointer.x * 0.08 + studio * 0.08 - gallery * 0.06,
-        2.2,
-        delta,
+        2.2, delta,
       );
-      studioRigRef.current.position.x = damp(
-        studioRigRef.current.position.x,
-        pointer.x * -0.4,
-        1.8,
-        delta,
-      );
-      studioRigRef.current.position.y = damp(
-        studioRigRef.current.position.y,
-        pointer.y * -0.18,
-        1.8,
-        delta,
-      );
+      studioRigRef.current.position.x = damp(studioRigRef.current.position.x, pointer.x * -0.4, 1.8, delta);
+      studioRigRef.current.position.y = damp(studioRigRef.current.position.y, pointer.y * -0.18, 1.8, delta);
     }
 
     if (heroGlowRef.current) {
@@ -326,65 +284,36 @@ function SceneStage({ scrollState }) {
       heroGlowRef.current.material.opacity = damp(
         heroGlowRef.current.material.opacity,
         0.18 + performance * 0.1 - final * 0.08,
-        2.4,
-        delta,
+        2.4, delta,
       );
     }
 
     if (keyLightRef.current) {
-      keyLightRef.current.intensity = damp(
-        keyLightRef.current.intensity,
-        keyLight,
-        2.2,
-        delta,
-      );
-      keyLightRef.current.position.x = damp(
-        keyLightRef.current.position.x,
-        3.6 + pointer.x * 1.2,
-        2.2,
-        delta,
-      );
-      keyLightRef.current.position.y = damp(
-        keyLightRef.current.position.y,
-        4.6 + pointer.y * 0.8,
-        2.2,
-        delta,
-      );
+      keyLightRef.current.intensity = damp(keyLightRef.current.intensity, keyLight, 2.2, delta);
+      keyLightRef.current.position.x = damp(keyLightRef.current.position.x, 3.6 + pointer.x * 1.2, 2.2, delta);
+      keyLightRef.current.position.y = damp(keyLightRef.current.position.y, 4.6 + pointer.y * 0.8, 2.2, delta);
     }
 
     if (rimLightRef.current) {
-      rimLightRef.current.intensity = damp(
-        rimLightRef.current.intensity,
-        rimLight,
-        2.2,
-        delta,
-      );
-      rimLightRef.current.position.x = damp(
-        rimLightRef.current.position.x,
-        -4.2 - pointer.x * 0.8,
-        2.2,
-        delta,
-      );
+      rimLightRef.current.intensity = damp(rimLightRef.current.intensity, rimLight, 2.2, delta);
+      rimLightRef.current.position.x = damp(rimLightRef.current.position.x, -4.2 - pointer.x * 0.8, 2.2, delta);
     }
 
     if (fillLightRef.current) {
-      fillLightRef.current.intensity = damp(
-        fillLightRef.current.intensity,
-        fillLight,
-        2.2,
-        delta,
-      );
+      fillLightRef.current.intensity = damp(fillLightRef.current.intensity, fillLight, 2.2, delta);
     }
 
     camera.position.x = damp(camera.position.x, cameraX, 2.6, delta);
     camera.position.y = damp(camera.position.y, cameraY, 2.6, delta);
     camera.position.z = damp(camera.position.z, cameraZ, 2.6, delta);
-    camera.lookAt(0, 0.45, 0);
+
+    // Camera looks at the car
+    camera.lookAt(carX * 0.3, carY + 0.6, 0);
   });
 
   return (
     <>
-      <PerspectiveCamera makeDefault position={[0, 0.8, 7.4]} fov={32} />
+      <PerspectiveCamera makeDefault position={[0, 1.8, 8.2]} fov={42} />
 
       <fog attach="fog" args={['#05070b', 12, 30]} />
 
@@ -397,29 +326,19 @@ function SceneStage({ scrollState }) {
         position={[3.6, 4.6, 5]}
         intensity={20}
       />
-      <pointLight
-        ref={rimLightRef}
-        color="#59d4ff"
-        position={[-4.2, 2.8, -4]}
-        intensity={10}
-      />
-      <pointLight
-        ref={fillLightRef}
-        color="#ff5a5a"
-        position={[1.8, 1.4, -5.5]}
-        intensity={7}
-      />
+      <pointLight ref={rimLightRef} color="#59d4ff" position={[-4.2, 2.8, -4]} intensity={10} />
+      <pointLight ref={fillLightRef} color="#ff5a5a" position={[1.8, 1.4, -5.5]} intensity={7} />
 
       <group ref={studioRigRef}>
         <StudioEnvironment />
       </group>
 
-      <mesh ref={heroGlowRef} position={[0.25, 1.2, -4.4]}>
+      <mesh ref={heroGlowRef} position={[0.25, 0.2, -4.4]}>
         <circleGeometry args={[3.8, 48]} />
         <meshBasicMaterial color="#58d6ff" transparent opacity={0.18} />
       </mesh>
 
-      <Float speed={1.1} rotationIntensity={0.16} floatIntensity={0.32}>
+      <Float speed={1.1} rotationIntensity={0.16} floatIntensity={0.18}>
         <group ref={carRigRef}>
           <CarModel />
         </group>

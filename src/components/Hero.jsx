@@ -119,7 +119,7 @@ export default function Hero() {
         </aside>
       </div>
 
-      <div className="hero-stats">
+<div className="hero-stats">
         {stats.map(([label, value]) => (
           <div className="hero-stat" key={label}>
             <span className="hero-stat-label">{label}</span>
