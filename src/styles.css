@@ -1068,26 +1068,6 @@ code {
     linear-gradient(180deg, #0f131b 0%, #06080d 100%);
 }
 
-.scrollbar-embed-section {
-  position: relative;
-  width: 100%;
-  min-height: 100vh;
-  min-height: 100svh;
-  padding: 0;
-  overflow: hidden;
-}
-
-.scrollbar-embed-iframe {
-  display: block;
-  width: 100%;
-  height: 100vh;
-  height: 100svh;
-  border: 0;
-  margin: 0;
-  padding: 0;
-  background: #020406;
-}
-
 .scene-layer-fallback {
   background:
     radial-gradient(circle at 58% 34%, rgba(91, 216, 255, 0.16), transparent 18%),
