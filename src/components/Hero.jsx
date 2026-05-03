@@ -101,8 +101,8 @@ export default function Hero() {
 
           <div className="hero-actions">
             <MagneticButton href="#cinematic">Play Scroll Film</MagneticButton>
-            <MagneticButton href="#final" variant="ghost">
-              Book Test Drive
+            <MagneticButton href="#gallery" variant="ghost">
+              Explore Gallery
             </MagneticButton>
           </div>
 

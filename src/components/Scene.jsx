@@ -157,7 +157,6 @@ function SceneStage({ scrollState }) {
     const studioPresence = clamp01(studio * 1.08 - gallery * 0.92);
     const galleryPresence = clamp01(gallery * 1.04 - studio * 0.78);
 
-    // Car positioned lower so camera (above) sees the full car centered
     let carX = compact ? 0.1 : 0.5;
     let carY = compact ? -0.5 : -0.55;
     let carZ = 0;
@@ -259,8 +258,18 @@ function SceneStage({ scrollState }) {
       carRigRef.current.position.x = damp(carRigRef.current.position.x, carX, 3.2, delta);
       carRigRef.current.position.y = damp(carRigRef.current.position.y, carY, 3.2, delta);
       carRigRef.current.position.z = damp(carRigRef.current.position.z, carZ, 3.2, delta);
-      carRigRef.current.rotation.x = damp(carRigRef.current.rotation.x, carRotX + sceneTiltX, 3.4, delta);
-      carRigRef.current.rotation.y = damp(carRigRef.current.rotation.y, carRotY + sceneTiltY, 3.4, delta);
+      carRigRef.current.rotation.x = damp(
+        carRigRef.current.rotation.x,
+        carRotX + sceneTiltX,
+        3.4,
+        delta,
+      );
+      carRigRef.current.rotation.y = damp(
+        carRigRef.current.rotation.y,
+        carRotY + sceneTiltY,
+        3.4,
+        delta,
+      );
       carRigRef.current.rotation.z = damp(carRigRef.current.rotation.z, carRotZ, 3.4, delta);
       carRigRef.current.scale.x = damp(carRigRef.current.scale.x, carScale, 3.2, delta);
       carRigRef.current.scale.y = damp(carRigRef.current.scale.y, carScale, 3.2, delta);
@@ -271,10 +280,21 @@ function SceneStage({ scrollState }) {
       studioRigRef.current.rotation.y = damp(
         studioRigRef.current.rotation.y,
         pointer.x * 0.08 + studio * 0.08 - gallery * 0.06,
-        2.2, delta,
+        2.2,
+        delta,
       );
-      studioRigRef.current.position.x = damp(studioRigRef.current.position.x, pointer.x * -0.4, 1.8, delta);
-      studioRigRef.current.position.y = damp(studioRigRef.current.position.y, pointer.y * -0.18, 1.8, delta);
+      studioRigRef.current.position.x = damp(
+        studioRigRef.current.position.x,
+        pointer.x * -0.4,
+        1.8,
+        delta,
+      );
+      studioRigRef.current.position.y = damp(
+        studioRigRef.current.position.y,
+        pointer.y * -0.18,
+        1.8,
+        delta,
+      );
     }
 
     if (heroGlowRef.current) {
@@ -284,19 +304,35 @@ function SceneStage({ scrollState }) {
       heroGlowRef.current.material.opacity = damp(
         heroGlowRef.current.material.opacity,
         0.18 + performance * 0.1 - final * 0.08,
-        2.4, delta,
+        2.4,
+        delta,
       );
     }
 
     if (keyLightRef.current) {
       keyLightRef.current.intensity = damp(keyLightRef.current.intensity, keyLight, 2.2, delta);
-      keyLightRef.current.position.x = damp(keyLightRef.current.position.x, 3.6 + pointer.x * 1.2, 2.2, delta);
-      keyLightRef.current.position.y = damp(keyLightRef.current.position.y, 4.6 + pointer.y * 0.8, 2.2, delta);
+      keyLightRef.current.position.x = damp(
+        keyLightRef.current.position.x,
+        3.6 + pointer.x * 1.2,
+        2.2,
+        delta,
+      );
+      keyLightRef.current.position.y = damp(
+        keyLightRef.current.position.y,
+        4.6 + pointer.y * 0.8,
+        2.2,
+        delta,
+      );
     }
 
     if (rimLightRef.current) {
       rimLightRef.current.intensity = damp(rimLightRef.current.intensity, rimLight, 2.2, delta);
-      rimLightRef.current.position.x = damp(rimLightRef.current.position.x, -4.2 - pointer.x * 0.8, 2.2, delta);
+      rimLightRef.current.position.x = damp(
+        rimLightRef.current.position.x,
+        -4.2 - pointer.x * 0.8,
+        2.2,
+        delta,
+      );
     }
 
     if (fillLightRef.current) {
@@ -306,8 +342,6 @@ function SceneStage({ scrollState }) {
     camera.position.x = damp(camera.position.x, cameraX, 2.6, delta);
     camera.position.y = damp(camera.position.y, cameraY, 2.6, delta);
     camera.position.z = damp(camera.position.z, cameraZ, 2.6, delta);
-
-    // Camera looks at the car
     camera.lookAt(carX * 0.3, carY + 0.6, 0);
   });
 
@@ -326,8 +360,18 @@ function SceneStage({ scrollState }) {
         position={[3.6, 4.6, 5]}
         intensity={20}
       />
-      <pointLight ref={rimLightRef} color="#59d4ff" position={[-4.2, 2.8, -4]} intensity={10} />
-      <pointLight ref={fillLightRef} color="#ff5a5a" position={[1.8, 1.4, -5.5]} intensity={7} />
+      <pointLight
+        ref={rimLightRef}
+        color="#59d4ff"
+        position={[-4.2, 2.8, -4]}
+        intensity={10}
+      />
+      <pointLight
+        ref={fillLightRef}
+        color="#ff5a5a"
+        position={[1.8, 1.4, -5.5]}
+        intensity={7}
+      />
 
       <group ref={studioRigRef}>
         <StudioEnvironment />

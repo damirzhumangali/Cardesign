@@ -3,10 +3,15 @@ import { useGLTF, RoundedBox } from '@react-three/drei';
 import { Box3, Color, MeshPhysicalMaterial, Vector3 } from 'three';
 import { useAssetPresence } from '../hooks/useAssetPresence';
 
-const carModelUrl = '/models/2018_mercedes-amg_gt4.glb';
+const defaultCarModelUrl = '/models/2018_mercedes-amg_gt4.glb';
 
-function NormalizedCarModel() {
-  const gltf = useGLTF(carModelUrl);
+function NormalizedCarModel({
+  modelUrl = defaultCarModelUrl,
+  normalizedSize = 4.8,
+  groundOffset = 0.08,
+  rotation = [0, 0, 0],
+}) {
+  const gltf = useGLTF(modelUrl);
 
   const { clone, scale, offset } = useMemo(() => {
     const scene = gltf.scene.clone(true);
@@ -18,7 +23,7 @@ function NormalizedCarModel() {
     box.getCenter(center);
 
     const maxDimension = Math.max(size.x, size.y, size.z) || 1;
-    const normalizedScale = 4.8 / maxDimension;
+    const normalizedScale = normalizedSize / maxDimension;
 
     scene.traverse((child) => {
       if (!child.isMesh) {
@@ -50,14 +55,14 @@ function NormalizedCarModel() {
       scale: normalizedScale,
       offset: [
         -center.x * normalizedScale,
-        -box.min.y * normalizedScale - 0.08,
+        -box.min.y * normalizedScale - groundOffset,
         -center.z * normalizedScale,
       ],
     };
-  }, [gltf.scene]);
+  }, [gltf.scene, groundOffset, normalizedSize]);
 
   return (
-    <group scale={scale} position={offset}>
+    <group scale={scale} position={offset} rotation={rotation}>
       <primitive object={clone} />
     </group>
   );
@@ -170,8 +175,13 @@ function FallbackCarModel() {
   );
 }
 
-export default function CarModel() {
-  const carAvailable = useAssetPresence(carModelUrl);
+export default function CarModel({
+  modelUrl = defaultCarModelUrl,
+  normalizedSize = 4.8,
+  groundOffset = 0.08,
+  rotation = [0, 0, 0],
+}) {
+  const carAvailable = useAssetPresence(modelUrl);
 
   if (!carAvailable) {
     return <FallbackCarModel />;
@@ -179,7 +189,12 @@ export default function CarModel() {
 
   return (
     <Suspense fallback={<FallbackCarModel />}>
-      <NormalizedCarModel />
+      <NormalizedCarModel
+        modelUrl={modelUrl}
+        normalizedSize={normalizedSize}
+        groundOffset={groundOffset}
+        rotation={rotation}
+      />
     </Suspense>
   );
 }

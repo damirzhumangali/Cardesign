@@ -6,8 +6,6 @@ import DesignSection from './components/DesignSection';
 import Performance from './components/Performance';
 import StudioSection from './components/StudioSection';
 import Gallery from './components/Gallery';
-import FinalCTA from './components/FinalCTA';
-import FinalDrive from './components/FinalDrive';
 import { useLenis } from './hooks/useLenis';
 import { useScrollProgress } from './hooks/useScrollProgress';
 
@@ -18,8 +16,6 @@ const sectionIds = [
   'performance',
   'studio',
   'gallery',
-  'final',
-  'drive',
 ];
 
 export default function App() {
@@ -138,7 +134,6 @@ export default function App() {
           <a href="#design">Design</a>
           <a href="#performance">Performance</a>
           <a href="#studio">Studio</a>
-          <a href="#final">Reserve</a>
         </nav>
       </header>
 
@@ -149,8 +144,6 @@ export default function App() {
         <Performance />
         <StudioSection />
         <Gallery />
-        <FinalCTA />
-        <FinalDrive />
       </main>
 
       <div className="cursor-glow" ref={cursorRef} aria-hidden="true" />
