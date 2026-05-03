@@ -1068,57 +1068,6 @@ code {
     linear-gradient(180deg, #0f131b 0%, #06080d 100%);
 }
 
-.drive-test-section {
-  min-height: 100vh;
-  padding: 0;
-}
-
-.drive-test-frame {
-  position: relative;
-  width: 100vw;
-  min-height: 100vh;
-  overflow: hidden;
-  background:
-    radial-gradient(circle at 50% 34%, rgba(91, 216, 255, 0.16), transparent 24%),
-    radial-gradient(circle at 60% 68%, rgba(255, 168, 108, 0.08), transparent 24%),
-    linear-gradient(180deg, rgba(7, 11, 18, 0.98), rgba(3, 5, 10, 1));
-  isolation: isolate;
-}
-
-.drive-test-canvas,
-.drive-test-backdrop,
-.drive-test-vignette {
-  position: absolute;
-  inset: 0;
-}
-
-.drive-test-canvas {
-  z-index: 2;
-}
-
-.drive-test-backdrop {
-  background:
-    radial-gradient(circle at 52% 34%, rgba(91, 216, 255, 0.2), transparent 24%),
-    radial-gradient(circle at 50% 58%, rgba(255, 255, 255, 0.06), transparent 34%),
-    linear-gradient(180deg, rgba(17, 26, 36, 0.74), rgba(6, 10, 16, 0.84));
-  z-index: 0;
-}
-
-.drive-test-vignette {
-  background:
-    radial-gradient(circle at 50% 44%, transparent 0, transparent 34%, rgba(4, 8, 14, 0.18) 76%, rgba(4, 8, 14, 0.3) 100%),
-    linear-gradient(180deg, rgba(2, 5, 9, 0.04), rgba(2, 5, 9, 0.12) 44%, rgba(2, 5, 9, 0.3) 100%),
-    linear-gradient(90deg, rgba(4, 8, 14, 0.12), transparent 15%, transparent 85%, rgba(4, 8, 14, 0.12));
-  z-index: 3;
-  pointer-events: none;
-}
-
-@media (max-width: 900px) {
-  .drive-test-section {
-    min-height: 100vh;
-  }
-}
-
 .scene-layer-fallback {
   background:
     radial-gradient(circle at 58% 34%, rgba(91, 216, 255, 0.16), transparent 18%),
@@ -1348,14 +1297,6 @@ code {
     min-height: 24rem;
   }
 
-  .drive-test-section {
-    height: 220vh;
-  }
-
-  .drive-test-copy-stack {
-    width: calc(100vw - 2rem);
-  }
-
 }
 
 @media (max-width: 720px) {
@@ -1402,34 +1343,6 @@ code {
 
   .studio-cards {
     grid-template-columns: 1fr;
-  }
-
-  .drive-test-section {
-    height: 190vh;
-  }
-
-  .drive-test-copy {
-    padding: 1rem;
-  }
-
-  .drive-test-copy-stack {
-    width: calc(100vw - 2rem);
-    min-height: 15rem;
-  }
-
-  .drive-test-title {
-    max-width: 11ch;
-    font-size: clamp(2.5rem, 11vw, 4.6rem);
-  }
-
-  .drive-test-body {
-    max-width: none;
-    font-size: 0.96rem;
-  }
-
-  .drive-test-status {
-    right: 1rem;
-    top: 5.8rem;
   }
 
   .cinematic-copy-title {

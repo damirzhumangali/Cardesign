@@ -153,7 +153,6 @@ function SceneStage({ scrollState }) {
     const performance = scrollState.sections.performance ?? 0;
     const studio = scrollState.sections.studio ?? 0;
     const gallery = scrollState.sections.gallery ?? 0;
-    const final = scrollState.sections.final ?? 0;
     const studioPresence = clamp01(studio * 1.08 - gallery * 0.92);
     const galleryPresence = clamp01(gallery * 1.04 - studio * 0.78);
 
@@ -237,20 +236,6 @@ function SceneStage({ scrollState }) {
       cameraZ = mix(cameraZ, compact ? 8 : 8.45, galleryPresence);
     }
 
-    if (final > 0) {
-      carX = mix(carX, compact ? 0.1 : 0.24, final);
-      carY = mix(carY, compact ? -0.5 : -0.55, final);
-      carZ = mix(carZ, -0.4, final);
-      carScale = mix(carScale, compact ? 0.8 : 1.0, final);
-      carRotY = mix(carRotY, 0.24, final);
-      cameraX = mix(cameraX, 0, final);
-      cameraY = mix(cameraY, compact ? 1.6 : 1.8, final);
-      cameraZ = mix(cameraZ, compact ? 9.4 : 10.6, final);
-      keyLight = mix(keyLight, 16, final);
-      rimLight = mix(rimLight, 8, final);
-      glowScale = mix(glowScale, 0.72, final);
-    }
-
     const sceneTiltX = pointer.y * 0.02;
     const sceneTiltY = pointer.x * 0.05;
 
@@ -303,7 +288,7 @@ function SceneStage({ scrollState }) {
       heroGlowRef.current.scale.y = damp(heroGlowRef.current.scale.y, targetScale, 2.4, delta);
       heroGlowRef.current.material.opacity = damp(
         heroGlowRef.current.material.opacity,
-        0.18 + performance * 0.1 - final * 0.08,
+        0.18 + performance * 0.1,
         2.4,
         delta,
       );

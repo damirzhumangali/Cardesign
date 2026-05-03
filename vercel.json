@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    {
+      "source": "/scrollbar",
+      "destination": "https://scrollbar-ivory.vercel.app"
+    },
+    {
+      "source": "/scrollbar/:path*",
+      "destination": "https://scrollbar-ivory.vercel.app/:path*"
+    }
+  ]
+}

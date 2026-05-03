@@ -58,8 +58,8 @@ export default function StudioSection() {
             reach zone.
           </p>
           <p className="section-caption">
-            The visual focus now stays clean through this section, and the moving
-            Mercedes appears only in the final scroll moment at the end of the site.
+            The visual focus stays clean through this section, keeping the studio
+            sequence calm, deliberate and free from an extra closing handoff.
           </p>
         </div>
 
