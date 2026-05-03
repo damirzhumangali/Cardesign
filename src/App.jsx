@@ -6,6 +6,7 @@ import DesignSection from './components/DesignSection';
 import Performance from './components/Performance';
 import StudioSection from './components/StudioSection';
 import Gallery from './components/Gallery';
+import ScrollbarEmbed from './components/ScrollbarEmbed';
 import { useLenis } from './hooks/useLenis';
 import { useScrollProgress } from './hooks/useScrollProgress';
 
@@ -144,6 +145,7 @@ export default function App() {
         <Performance />
         <StudioSection />
         <Gallery />
+        <ScrollbarEmbed />
       </main>
 
       <div className="cursor-glow" ref={cursorRef} aria-hidden="true" />
